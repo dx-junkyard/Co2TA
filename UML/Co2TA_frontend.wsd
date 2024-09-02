@@ -1,0 +1,19 @@
+@startuml
+package "Azure Web App" as Azure {
+    class "Message" as Message {
+        {static} Configulation
+        {static} LLM_setting
+        LlamaIndex: Context
+        User Input: Prompt
+    }
+    rectangle "Webアプリケーション" as WebApp
+    rectangle "Next.js" as Next
+    rectangle "React" as React
+    rectangle "Node.js" as Node
+
+    WebApp <-down- Next
+    Next <-down- React
+    React <-down- Node
+}
+
+@enduml

@@ -1,36 +1,9 @@
 @startuml Co2TA // Carbon Tech Assist
 allowmixing
 
-package "Azure Web App" as Azure {
-    class "Message" as Message {
-        {static} Configulation
-        {static} LLM_setting
-        LlamaIndex: Context
-        User Input: Prompt
-    }
-    rectangle "Webアプリケーション" as WebApp
-    rectangle "Next.js" as Next
-    rectangle "React" as React
-    rectangle "Node.js" as Node
-
-    WebApp <-down- Next
-    Next <-down- React
-    React <-down- Node
-}
-
-package "ODB: Code Interpreter" as ODB {
-    rectangle "Interpreter" as Interpreter
-    rectangle "LLM" as LLM
-    rectangle "Docker" as Docker
-    package "Functions" {
-        rectangle "Base Registry" as BaseRegistry
-    }
-
-    LLM --> Interpreter : Message
-    LLM <-- Interpreter : Markdown + Python Code
-    Docker --> Interpreter : Python Code + Files
-    Docker <-- Interpreter : File update + PNG
-}
+!include Co2TA_frontend.wsd
+!include Co2TA_ODB.wsd
+!include Co2TA_backend.wsd
 
 actor "User" as User
 collections "GitHub" as GitHub
@@ -39,35 +12,6 @@ User --> WebApp : Prompt
 note top of User : "生産者の情報"
 User <-- WebApp : "作成した申請書"
 
-package "Backend" {
-    package "Functions" as service_func {
-        rectangle "Opendata APIs" as OpenDataAPI
-    }
-    package "Llama-index" as LlamaIndexSearch {
-        rectangle "Vector Database" as VectorDB
-    }
-}
 
-Message <-- BaseRegistry : プロンプト内の住所を整形
-Message <-- OpenDataAPI : プロンプトの不足項目を補完
-Message <-- LlamaIndexSearch : 過去の事例を引用
-Message --> ODB : Prompt (Message), Contextを渡して処理
-WebApp --> Message
-
-GitHub --> Azure : Deploy
-note right of GitHub : "最新のパッケージ"
-GitHub --> service_func : Deploy
-
-package "Local PC" {
-    rectangle "Llama-index" as LlamaIndexDev
-}
-
-LlamaIndexDev --> VectorDB : 更新
-
-cloud "Web" {
-    database "PDF" as PDF
-}
-
-LlamaIndexDev <-- PDF : クロールして集める
 
 @enduml

@@ -1,0 +1,16 @@
+@startuml
+package "ODB: Code Interpreter" as ODB {
+    rectangle "Interpreter" as Interpreter
+    rectangle "LLM" as LLM
+    rectangle "Docker" as Docker
+    package "Functions" {
+        rectangle "Base Registry" as BaseRegistry
+    }
+
+    LLM --> Interpreter : Message
+    LLM <-- Interpreter : Markdown + Python Code
+    Docker --> Interpreter : Python Code + Files
+    Docker <-- Interpreter : File update + PNG
+}
+
+@enduml

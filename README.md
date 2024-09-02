@@ -10,6 +10,38 @@ ITに長けた都市部住人がふるさと納税のように「カーボンテ
 ツールの開発とビジネスの開発の二つに分かれます。
 
 ## ツール開発
+全体設計は以下のUMLを参照してください。
+![image](UML/Co2TA20240902.png)
+
+
+### Frontend
+UXはChatGPTのGPTsに近しい画面となります。
+![image](20240824_Sample.png)
+
+
+### ODB
+LLMとの接続は以下のOpenData Bridgeを使用します。
+内部的にOpen Interpreterを使用し、LLMがデータ処理を担うPythonコードを生成することが特徴です。
+
+
+https://github.com/dx-junkyard/opendata-bridge-frontend
+
+
+### Backend (含むLocal Dev PC)
+J-クレジット申請書は以下の認定済み申請書をデータベースとして利用します。
+
+https://japancredit.go.jp/project/
+
+
+J-クレジットはあらかじめ承認された方法論でしか申請を受けることをしません。そこで、以下の方法論ごとに内部的にテンプレートを持つことを想定しています。Backendは定期的に方法論や認定済み申請書を更新して最新の情報を取り込みます。
+
+https://japancredit.go.jp/about/methodology/
+
+
+データ解析と検索エンジンにはLlama-indexを使用します。
+Neural EngineとしてnVidia以外にAMDやFPGAを使うことも想定しており、OpenCLやVulkanでの動作実績があるLlama-indexを使用します。
+
+
 
 
 ## ビジネス開発
